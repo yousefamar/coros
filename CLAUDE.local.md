@@ -1,0 +1,1 @@
+- Do not run npm run dev, I'm doing that in another terminal 
