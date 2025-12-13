@@ -5,7 +5,14 @@
       "Bash(npx tsc:*)",
       "Bash(git pull:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(npm run build)",
+      "Bash(npm view:*)",
+      "Bash(npm install:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
     ],
     "deny": []
   }

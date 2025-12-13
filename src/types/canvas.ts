@@ -1,48 +1,47 @@
-import { OrthographicCamera } from 'three'
-
 export interface CameraPosition {
-  x: number
-  z: number
+  x: number;
+  z: number;
 }
 
 export interface MousePosition {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
 export interface ZoomConfig {
-  min: number
-  max: number
-  speed: number
-  default: number
+  min: number;
+  max: number;
+  speed: number;
+  default: number;
 }
 
 export interface GridConfig {
-  baseSize: number
-  viewRadius: number
-  maxDots: number
-  dotRadius: number
-  color: string
+  baseSize: number;
+  color: string;
+  planeSize: number;
+}
+
+export interface CameraRigConfig {
+  cameraDistance: number;
+  pivotRotationX: number;
 }
 
 export interface CanvasConfig {
   camera: {
-    position: [number, number, number]
-    rotation: [number, number, number]
-    zoom: number
-    near: number
-    far: number
-  }
-  background: string
+    position: [number, number, number];
+    rotation: [number, number, number];
+    zoom: number;
+    near: number;
+    far: number;
+  };
+  background: string;
   lighting: {
     ambient: {
-      intensity: number
-    }
+      intensity: number;
+    };
     directional: {
-      position: [number, number, number]
-      intensity: number
-    }
-  }
+      position: [number, number, number];
+      intensity: number;
+    };
+  };
 }
-
-export type CanvasCamera = OrthographicCamera
