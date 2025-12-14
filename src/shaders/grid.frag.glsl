@@ -8,7 +8,7 @@ varying vec2 vWorldPos;
 void main() {
   float spacing = uGridSize * 3.0;
 
-  vec2 cellCenter = (floor(vWorldPos / spacing) + 0.5) * spacing;
+  vec2 cellCenter = (floor(vWorldPos / spacing) + 0.5) * spacing ;
   vec2 offset = abs(vWorldPos - cellCenter);
 
   float armLength = uDotRadius * 2.0;
@@ -32,7 +32,7 @@ void main() {
   float dotRadius = uDotRadius * 0.3;
   float dotShape = 1.0 - smoothstep(dotRadius - edgeSoftness, dotRadius + edgeSoftness, dotDist);
 
-  float zoomFade = smoothstep(25.0, 40.0, uZoom);
+  float zoomFade = smoothstep(20.0, 60.0, uZoom);
 
   vec2 starCenter = cellCenter;
   float starCenterDist = length(vWorldPos - starCenter);
