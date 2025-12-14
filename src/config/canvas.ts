@@ -6,8 +6,8 @@ import type {
 } from "../types/canvas";
 
 export const ZOOM_CONFIG: ZoomConfig = {
-  min: 10,
-  max: 1000,
+  min: 20,
+  max: 100,
   speed: 0.1,
   default: 50,
 };
@@ -25,9 +25,9 @@ export const GRID_CONFIG: GridConfig = {
 
 export const MARKDOWN_OBJECT_CONFIG = {
   size: {
-    width: 1.2,
-    height: 0.1,
-    depth: 1.6,
+    width: 1,
+    height: 1,
+    depth: 1,
   },
   colors: {
     default: "#4a5568",
@@ -37,7 +37,7 @@ export const MARKDOWN_OBJECT_CONFIG = {
   label: {
     fontSize: 0.15,
     color: "#ffffff",
-    offset: 0.2,
+    offset: 0.6,
   },
 };
 

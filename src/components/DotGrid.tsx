@@ -1,55 +1,31 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { ShaderMaterial, OrthographicCamera, Mesh, DoubleSide } from "three";
 import { GRID_CONFIG } from "../config/canvas";
+import vertexShader from "../shaders/grid.vert.glsl?raw";
+import fragmentShader from "../shaders/grid.frag.glsl?raw";
 
-const vertexShader = `
-  varying vec2 vWorldPos;
-
-  void main() {
-    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-    vWorldPos = worldPosition.xy;
-    gl_Position = projectionMatrix * viewMatrix * worldPosition;
-  }
-`;
-
-const fragmentShader = `
-  uniform float uGridSize;
-  uniform float uDotRadius;
-  uniform vec3 uDotColor;
-  uniform float uZoom;
-
-  varying vec2 vWorldPos;
-
-  float getGridLevel(float zoom) {
-    if (zoom > 50.0) return 1.0;
-    if (zoom > 25.0) return 2.0;
-    if (zoom > 10.0) return 4.0;
-    if (zoom > 5.0) return 8.0;
-    return 16.0;
-  }
-
-  void main() {
-    float gridLevel = getGridLevel(uZoom);
-    float spacing = uGridSize * gridLevel;
-
-    vec2 gridPos = mod(vWorldPos + spacing * 0.5, spacing) - spacing * 0.5;
-    float dist = length(gridPos);
-
-    float radius = uDotRadius * gridLevel;
-    float edge = fwidth(dist) * 1.5;
-    float dot = 1.0 - smoothstep(radius - edge, radius + edge, dist);
-
-    if (dot < 0.01) discard;
-
-    gl_FragColor = vec4(uDotColor, dot);
-  }
-`;
+if (import.meta.hot) {
+  import.meta.hot.accept(
+    ["../shaders/grid.vert.glsl", "../shaders/grid.frag.glsl"],
+    () => {
+      console.log("Shaders updated - HMR triggered");
+    }
+  );
+}
 
 export function DotGrid() {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<ShaderMaterial>(null);
   const { camera } = useThree();
+
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.vertexShader = vertexShader;
+      materialRef.current.fragmentShader = fragmentShader;
+      materialRef.current.needsUpdate = true;
+    }
+  }, [vertexShader, fragmentShader]);
 
   useFrame(() => {
     if (!materialRef.current || !meshRef.current) return;

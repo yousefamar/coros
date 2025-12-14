@@ -21,7 +21,7 @@ export function MarkdownObject({ file, onClick }: MarkdownObjectProps) {
     : MARKDOWN_OBJECT_CONFIG.colors.default;
 
   return (
-    <group position={[position.x, position.y, 0]}>
+    <group position={[position.x, position.y, 0.5]}>
       <mesh
         ref={meshRef}
         castShadow
@@ -44,15 +44,15 @@ export function MarkdownObject({ file, onClick }: MarkdownObjectProps) {
         <boxGeometry
           args={[
             MARKDOWN_OBJECT_CONFIG.size.width,
-            MARKDOWN_OBJECT_CONFIG.size.height,
             MARKDOWN_OBJECT_CONFIG.size.depth,
+            MARKDOWN_OBJECT_CONFIG.size.height,
           ]}
         />
         <meshStandardMaterial color={color} />
       </mesh>
 
       <Text
-        position={[0, MARKDOWN_OBJECT_CONFIG.label.offset, 0]}
+        position={[0, 0, MARKDOWN_OBJECT_CONFIG.label.offset]}
         fontSize={MARKDOWN_OBJECT_CONFIG.label.fontSize}
         color={MARKDOWN_OBJECT_CONFIG.label.color}
         anchorX="center"
