@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
+import type { Mesh, MeshStandardMaterial } from "three";
 import { MarkdownObject } from "./MarkdownObject";
 import {
   requestDirectoryAccess,
@@ -10,7 +12,11 @@ import {
 } from "../services/persistence";
 import type { MarkdownFile, FileSystemState } from "../types/fileSystem";
 
-export function FileSystemManager() {
+interface FileSystemManagerProps {
+  onFileClick: (file: MarkdownFile) => void;
+}
+
+export function FileSystemManager({ onFileClick }: FileSystemManagerProps) {
   const [state, setState] = useState<FileSystemState>({
     directoryHandle: null,
     files: [],
@@ -18,29 +24,32 @@ export function FileSystemManager() {
     error: null,
   });
 
-  const loadDirectory = async (directoryHandle: FileSystemDirectoryHandle) => {
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+  const loadDirectory = useCallback(
+    async (directoryHandle: FileSystemDirectoryHandle) => {
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-    try {
-      const files = await readMarkdownFiles(directoryHandle);
+      try {
+        const files = await readMarkdownFiles(directoryHandle);
 
-      setState({
-        directoryHandle,
-        files,
-        isLoading: false,
-        error: null,
-      });
+        setState({
+          directoryHandle,
+          files,
+          isLoading: false,
+          error: null,
+        });
 
-      await saveDirectoryHandle(directoryHandle);
-    } catch (error) {
-      console.error("Error loading directory:", error);
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: (error as Error).message,
-      }));
-    }
-  };
+        await saveDirectoryHandle(directoryHandle);
+      } catch (error) {
+        console.error("Error loading directory:", error);
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: (error as Error).message,
+        }));
+      }
+    },
+    [],
+  );
 
   const handleOpenDirectory = async () => {
     try {
@@ -70,41 +79,57 @@ export function FileSystemManager() {
     };
 
     loadSavedDirectory();
-  }, []);
+  }, [loadDirectory]);
 
-  const handleFileClick = (file: MarkdownFile) => {
-    console.log("Clicked file:", file);
-  };
+  useEffect(() => {
+    return () => {
+      document.body.style.cursor = "auto";
+    };
+  }, []);
 
   return (
     <>
       {state.files.map((file) => (
-        <MarkdownObject
-          key={file.path}
-          file={file}
-          onClick={handleFileClick}
-        />
+        <MarkdownObject key={file.path} file={file} onClick={onFileClick} />
       ))}
 
-      {!state.directoryHandle && (
+      {state.isLoading && (
+        <mesh position={[0, 0, 0.5]}>
+          <boxGeometry args={[1.5, 0.3, 0.1]} />
+          <meshStandardMaterial color="#667eea" />
+        </mesh>
+      )}
+
+      {state.error && (
+        <mesh position={[0, 0, 0.5]}>
+          <boxGeometry args={[2, 0.4, 0.1]} />
+          <meshStandardMaterial color="#e53e3e" />
+        </mesh>
+      )}
+
+      {!state.directoryHandle && !state.isLoading && (
         <group>
           <mesh
             position={[0, 0, 0]}
-            onClick={(e) => {
+            onClick={(e: ThreeEvent<MouseEvent>) => {
               e.stopPropagation();
               handleOpenDirectory();
             }}
-            onPointerDown={(e) => {
+            onPointerDown={(e: ThreeEvent<PointerEvent>) => {
               e.stopPropagation();
             }}
-            onPointerEnter={(e) => {
+            onPointerEnter={(e: ThreeEvent<PointerEvent>) => {
               e.stopPropagation();
-              (e.object as any).material.color.set("#667eea");
+              const mesh = e.object as Mesh;
+              const material = mesh.material as MeshStandardMaterial;
+              material.color.set("#667eea");
               document.body.style.cursor = "pointer";
             }}
-            onPointerLeave={(e) => {
+            onPointerLeave={(e: ThreeEvent<PointerEvent>) => {
               e.stopPropagation();
-              (e.object as any).material.color.set("#4a5568");
+              const mesh = e.object as Mesh;
+              const material = mesh.material as MeshStandardMaterial;
+              material.color.set("#4a5568");
               document.body.style.cursor = "auto";
             }}
           >

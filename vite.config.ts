@@ -1,29 +1,25 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/postcss'
-import autoprefixer from 'autoprefixer'
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  css: {
-    postcss: {
-      plugins: [tailwindcss, autoprefixer],
-    },
-  },
+  plugins: [react(), tailwindcss()],
   define: {
-    'global': 'globalThis',
+    global: "globalThis",
   },
   resolve: {
     alias: {
-      'buffer': 'buffer/',
+      buffer: "buffer/",
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: 'globalThis',
+        global: "globalThis",
       },
     },
   },
-})
+});

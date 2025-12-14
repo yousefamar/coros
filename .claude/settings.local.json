@@ -12,7 +12,10 @@
       "Bash(npm view:*)",
       "Bash(npm install:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(bun x shadcn@latest init:*)",
+      "Bash(/home/amar/.bun/bin/bun add:*)",
+      "Bash(PATH=\"/home/amar/.bun/bin:$PATH\" /home/amar/.bun/bin/bun x shadcn@latest init -d)"
     ],
     "deny": []
   }

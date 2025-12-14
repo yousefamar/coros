@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { Canvas as ThreeCanvas } from "@react-three/fiber";
 import { Avatar } from "./Avatar";
 import { DotGrid } from "./DotGrid";
 import { CameraRig } from "./CameraRig";
 import { CanvasControls } from "./CanvasControls";
 import { FileSystemManager } from "./FileSystemManager";
+import { DocumentViewer } from "./DocumentViewer";
 import { CANVAS_CONFIG, ZOOM_CONFIG } from "../config/canvas";
+import type { MarkdownFile } from "../types/fileSystem";
 
 export function Canvas() {
+  const [selectedFile, setSelectedFile] = useState<MarkdownFile | null>(null);
+
   return (
     <div className="w-screen h-screen">
       <ThreeCanvas
@@ -29,9 +34,11 @@ export function Canvas() {
         </CameraRig>
 
         <Avatar />
-        <FileSystemManager />
+        <FileSystemManager onFileClick={setSelectedFile} />
         <CanvasControls />
       </ThreeCanvas>
+
+      <DocumentViewer file={selectedFile} onClose={() => setSelectedFile(null)} />
     </div>
   );
 }
