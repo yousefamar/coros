@@ -11,4 +11,19 @@ export default defineConfig({
       plugins: [tailwindcss, autoprefixer],
     },
   },
+  define: {
+    'global': 'globalThis',
+  },
+  resolve: {
+    alias: {
+      'buffer': 'buffer/',
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
+  },
 })

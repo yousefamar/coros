@@ -3,6 +3,7 @@ import { Avatar } from "./Avatar";
 import { DotGrid } from "./DotGrid";
 import { CameraRig } from "./CameraRig";
 import { CanvasControls } from "./CanvasControls";
+import { FileSystemManager } from "./FileSystemManager";
 import { CANVAS_CONFIG, ZOOM_CONFIG } from "../config/canvas";
 
 export function Canvas() {
@@ -28,6 +29,7 @@ export function Canvas() {
         </CameraRig>
 
         <Avatar />
+        <FileSystemManager />
         <CanvasControls />
       </ThreeCanvas>
     </div>

@@ -9,7 +9,7 @@ export function CanvasControls() {
   const { camera, gl, scene } = useThree();
   const isDragging = useRef(false);
   const lastMouse = useRef<MousePosition>({ x: 0, y: 0 });
-  const pivotPos = useRef<CameraPosition>({ x: 0, z: 0 });
+  const pivotPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const zoom = useRef(ZOOM_CONFIG.default);
 
   useEffect(() => {
@@ -32,10 +32,10 @@ export function CanvasControls() {
 
       const moveSpeed = 1 / zoom.current;
       pivotPos.current.x -= deltaX * moveSpeed;
-      pivotPos.current.z -= deltaY * moveSpeed;
+      pivotPos.current.y += deltaY * moveSpeed;
 
       pivot.position.x = pivotPos.current.x;
-      pivot.position.z = pivotPos.current.z;
+      pivot.position.y = pivotPos.current.y;
 
       lastMouse.current = { x: e.clientX, y: e.clientY };
     };

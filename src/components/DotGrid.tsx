@@ -8,7 +8,7 @@ const vertexShader = `
 
   void main() {
     vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-    vWorldPos = worldPosition.xz;
+    vWorldPos = worldPosition.xy;
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
   }
 `;
@@ -60,7 +60,7 @@ export function DotGrid() {
     const parent = meshRef.current.parent;
     if (parent) {
       meshRef.current.position.x = 0;
-      meshRef.current.position.z = 0;
+      meshRef.current.position.y = 0;
     }
   });
 
@@ -72,7 +72,7 @@ export function DotGrid() {
   };
 
   return (
-    <mesh ref={meshRef} rotation-x={-Math.PI / 2} position-y={-0.01}>
+    <mesh ref={meshRef} position-z={-0.01}>
       <planeGeometry args={[GRID_CONFIG.planeSize, GRID_CONFIG.planeSize]} />
       <shaderMaterial
         ref={materialRef}
