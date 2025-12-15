@@ -94,6 +94,15 @@ visible: true
 - **Browser APIs** – only modern Chromium-based browsers expose the File System Access API. Provide clear errors if permissions fail.
 - **Performance** – keep canvas work lightweight; shader grid + instanced meshes avoid expensive DOM nodes.
 - **Global polyfills** – `vite.config.ts` defines `globalThis` and aliases `buffer` to keep libraries like `gray-matter` functional.
+- **Permission & error handling** – `FileSystemManager` keeps explicit loading/error states, retries persisted handles, and renders visible error meshes if permissions are denied so the user understands what failed.
+
+## Security & Compatibility
+
+- **Principle of local-only data** – Markdown contents and directory handles never leave the browser; we only persist opaque handles inside IndexedDB and never transmit file data to a server. New code must preserve this guarantee.
+- **Scope permissions** – Always request the smallest directory scope that satisfies the feature. The File System Access API only works in secure contexts (https / localhost) and after a user gesture; handle `AbortError` gracefully.
+- **Permission lifecycle** – Users can revoke handles at any time. `loadDirectoryHandle()` already re-requests `read` access; keep this pattern when adding write/edit flows and surface actionable UI when access is lost.
+- **Browser support** – The File System Access API currently ships in Chromium-based browsers (Chrome/Edge/Brave v86+). Safari/Firefox users should see an explanatory prompt rather than a broken canvas. Feature-detect `showDirectoryPicker` before invoking it.
+- **Error messaging** – When APIs are unavailable or permissions are denied, show the neutral box mesh with instructions or fall back to a static read-only mode. Never spam permission dialogs; wait for an explicit user action.
 
 ## Development Philosophy
 
